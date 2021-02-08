@@ -13,9 +13,18 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-def buildnumber = System.getenv("BUILD_NUMBER")
-def travisbuildnumber = (System.getenv("TRAVIS_BUILD_NUMBER") ?: -000).toInteger() + 00
-version = "${mod_version}.${buildnumber ?: travisbuildnumber}"
+def IsCI = System.getenv("GITHUB_ACTIONS")
+def nightly = System.getenv("GITHUB_NIGHTLY")
+
+// forge standard -> https://mcforge.readthedocs.io/en/latest/conventions/versioning
+// tl;dr: MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH(-beta)
+// example output would be: 1.16.4-3.0.0.0-ci1.5 for PR builds
+// 1.16.4-3.0.0.0-beta4.1 for nightly builds (maybe increment the mod_minor)
+
+def tag = "{nightly?"beta":"ci"}"
+def suffix = "-${tag}${System.getenv("GITHUB_RUN_ID")}.${System.getenv("GITHUB_RUN_NUMBER")}"
+version = "${minecraft_version}-${mod_major}.${mod_api_minor}.${mod_minor}.${mod_patch}${IsCI?:suffix}"
+
 group = group_id // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ModularPowerArmor-${minecraft_version}"
 
