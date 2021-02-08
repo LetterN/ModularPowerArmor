@@ -1,5 +1,5 @@
 name: CI Suite
-on: [push]
+on: [push, pull_request]
 jobs:
   run_test:
     name: Integration Tests
