@@ -21,7 +21,7 @@ def nightly = System.getenv("GITHUB_NIGHTLY")
 // example output would be: 1.16.4-3.0.0.0-ci1.5 for PR builds
 // 1.16.4-3.0.0.0-beta4.1 for nightly builds (maybe increment the mod_minor)
 
-def tag = "{nightly?"beta":"ci"}"
+def tag = nightly ? "beta" : "ci"
 def suffix = "-${tag}${System.getenv("GITHUB_RUN_ID")}.${System.getenv("GITHUB_RUN_NUMBER")}"
 version = "${minecraft_version}-${mod_major}.${mod_api_minor}.${mod_minor}.${mod_patch}${IsCI?:suffix}"
 
